@@ -10,11 +10,8 @@ HTML file, one stylesheet and one JavaScript file.
 ## Demo
 
 ```
-https://YOUR-GITHUB-USERNAME.github.io/github-profile-finder/
+https://allahverdi-dev.github.io/github-profile-finder/
 ```
-
-> Placeholder. The repository has not been published yet — this URL will be updated after the
-> GitHub Pages deployment.
 
 ---
 
