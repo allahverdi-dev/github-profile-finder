@@ -1,384 +1,911 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>GitHub Profile Finder</title>
-<meta name="description" content="Search for a GitHub user and explore their profile, repositories, activity and contributions." />
-<meta name="color-scheme" content="light dark" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/styles.css" />
-<script>
-  /* Applied before first paint so a dark-theme visitor never sees a light flash. */
-  (function () {
-    try {
-      var stored = localStorage.getItem("gpf-theme");
-      var dark = stored ? stored === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
-      document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
-    } catch (e) { /* private mode: fall back to the markup default */ }
-  })();
-</script>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M8 0a8 8 0 0 0-2.5 15.6c.4.1.5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-1-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.4.7 0-.6.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-4 0-.9.3-1.6.8-2.1 0-.2-.3-1 .1-2.1 0 0 .7-.2 2.2.8a7.6 7.6 0 0 1 4 0c1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.5.8 1.2.8 2.1 0 3.1-1.8 3.8-3.6 4 .3.3.6.8.6 1.6v2.2c0 .2.1.5.5.4A8 8 0 0 0 8 0Z'/></svg>" />
-</head>
-<body>
-<a class="skip-link" href="#main">Skip to content</a>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>GitHub Profile Finder</title>
+    <meta
+      name="description"
+      content="Search for a GitHub user and explore their profile, repositories, activity and contributions."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script>
+      /* Applied before first paint so a dark-theme visitor never sees a light flash. */
+      (function () {
+        try {
+          var stored = localStorage.getItem("gpf-theme");
+          var dark = stored
+            ? stored === "dark"
+            : window.matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.setAttribute(
+            "data-theme",
+            dark ? "dark" : "light",
+          );
+        } catch (e) {
+          /* private mode: fall back to the markup default */
+        }
+      })();
+    </script>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M8 0a8 8 0 0 0-2.5 15.6c.4.1.5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-1-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.4.7 0-.6.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-4 0-.9.3-1.6.8-2.1 0-.2-.3-1 .1-2.1 0 0 .7-.2 2.2.8a7.6 7.6 0 0 1 4 0c1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.5.8 1.2.8 2.1 0 3.1-1.8 3.8-3.6 4 .3.3.6.8.6 1.6v2.2c0 .2.1.5.5.4A8 8 0 0 0 8 0Z'/></svg>"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
 
-<!-- ============ ICON SPRITE ============ -->
-<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
-  <defs>
-    <symbol id="i-mark" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.35C3.8 14.29 3.34 12.8 3.34 12.8c-.36-.92-.88-1.16-.88-1.16-.72-.5.05-.48.05-.48.8.05 1.22.82 1.22.82.71 1.21 1.86.86 2.32.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.94.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></symbol>
-    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
-    <symbol id="i-location" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
-    <symbol id="i-company" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v17M14 9h4a1 1 0 0 1 1 1v11"/><path d="M8 7h2M8 11h2M8 15h2"/></symbol>
-    <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.07 0l2.5-2.5a5 5 0 0 0-7.07-7.07L11 5"/><path d="M14 11a5 5 0 0 0-7.07 0l-2.5 2.5a5 5 0 0 0 7.07 7.07L13 19"/></symbol>
-    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></symbol>
-    <symbol id="i-repo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19.5A2.5 2.5 0 0 1 7.5 17H20"/><path d="M7.5 3H20v18H7.5A2.5 2.5 0 0 1 5 18.5v-13A2.5 2.5 0 0 1 7.5 3Z"/></symbol>
-    <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9L12 3.5Z"/></symbol>
-    <symbol id="i-fork" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="5" r="2.5"/><circle cx="18" cy="5" r="2.5"/><circle cx="12" cy="19" r="2.5"/><path d="M6 7.5v2a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-2M12 12.5v4"/></symbol>
-    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 5.2a3.5 3.5 0 0 1 0 6.6M18 14.6a6.5 6.5 0 0 1 3.5 5.4"/></symbol>
-    <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6-6 6 6 6M15 6l6 6-6 6"/></symbol>
-    <symbol id="i-gist" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
-    <symbol id="i-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="m20 4-8.5 8.5"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
-    <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
-    <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></symbol>
-    <symbol id="i-filter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
-    <symbol id="i-sort" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16m0 0-3-3m3 3 3-3M17 20V4m0 0-3 3m3-3 3 3"/></symbol>
-    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
-    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></symbol>
-    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
-    <symbol id="i-issue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.5"/></symbol>
-    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5 2.5 20h19L12 4.5Z"/><path d="M12 10v4M12 17h.01"/></symbol>
-    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5 5L20 6.5"/></symbol>
-  </defs>
-</svg>
+    <!-- ============ ICON SPRITE ============ -->
+    <svg
+      aria-hidden="true"
+      style="position: absolute; width: 0; height: 0; overflow: hidden"
+    >
+      <defs>
+        <symbol id="i-mark" viewBox="0 0 16 16">
+          <path
+            fill="currentColor"
+            d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.35C3.8 14.29 3.34 12.8 3.34 12.8c-.36-.92-.88-1.16-.88-1.16-.72-.5.05-.48.05-.48.8.05 1.22.82 1.22.82.71 1.21 1.86.86 2.32.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.94.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"
+          />
+        </symbol>
+        <symbol
+          id="i-search"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" />
+        </symbol>
+        <symbol
+          id="i-location"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 1 1 16 0Z" />
+          <circle cx="12" cy="10" r="3" />
+        </symbol>
+        <symbol
+          id="i-company"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M3 21h18M5 21V4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v17M14 9h4a1 1 0 0 1 1 1v11"
+          />
+          <path d="M8 7h2M8 11h2M8 15h2" />
+        </symbol>
+        <symbol
+          id="i-link"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M10 13a5 5 0 0 0 7.07 0l2.5-2.5a5 5 0 0 0-7.07-7.07L11 5" />
+          <path
+            d="M14 11a5 5 0 0 0-7.07 0l-2.5 2.5a5 5 0 0 0 7.07 7.07L13 19"
+          />
+        </symbol>
+        <symbol
+          id="i-calendar"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M8 3v4M16 3v4M3 10h18" />
+        </symbol>
+        <symbol
+          id="i-repo"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M5 19.5A2.5 2.5 0 0 1 7.5 17H20" />
+          <path
+            d="M7.5 3H20v18H7.5A2.5 2.5 0 0 1 5 18.5v-13A2.5 2.5 0 0 1 7.5 3Z"
+          />
+        </symbol>
+        <symbol
+          id="i-star"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9L12 3.5Z"
+          />
+        </symbol>
+        <symbol
+          id="i-fork"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="6" cy="5" r="2.5" />
+          <circle cx="18" cy="5" r="2.5" />
+          <circle cx="12" cy="19" r="2.5" />
+          <path d="M6 7.5v2a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-2M12 12.5v4" />
+        </symbol>
+        <symbol
+          id="i-users"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="9" cy="8" r="3.5" />
+          <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
+          <path d="M16 5.2a3.5 3.5 0 0 1 0 6.6M18 14.6a6.5 6.5 0 0 1 3.5 5.4" />
+        </symbol>
+        <symbol
+          id="i-code"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m9 6-6 6 6 6M15 6l6 6-6 6" />
+        </symbol>
+        <symbol
+          id="i-gist"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"
+          />
+          <path d="M14 3v5h5M9 13h6M9 17h4" />
+        </symbol>
+        <symbol
+          id="i-external"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M14 4h6v6" />
+          <path d="m20 4-8.5 8.5" />
+          <path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
+        </symbol>
+        <symbol
+          id="i-arrow-right"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M4 12h15M13 6l6 6-6 6" />
+        </symbol>
+        <symbol
+          id="i-close"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m6 6 12 12M18 6 6 18" />
+        </symbol>
+        <symbol
+          id="i-filter"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M4 6h16M7 12h10M10 18h4" />
+        </symbol>
+        <symbol
+          id="i-sort"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M7 4v16m0 0-3-3m3 3 3-3M17 20V4m0 0-3 3m3-3 3 3" />
+        </symbol>
+        <symbol
+          id="i-sun"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path
+            d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+          />
+        </symbol>
+        <symbol
+          id="i-moon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" />
+        </symbol>
+        <symbol
+          id="i-menu"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </symbol>
+        <symbol
+          id="i-issue"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="8.5" />
+          <circle cx="12" cy="12" r="2.5" />
+        </symbol>
+        <symbol
+          id="i-alert"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 4.5 2.5 20h19L12 4.5Z" />
+          <path d="M12 10v4M12 17h.01" />
+        </symbol>
+        <symbol
+          id="i-check"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m4 12.5 5 5L20 6.5" />
+        </symbol>
+      </defs>
+    </svg>
 
-<!-- ============ HEADER ============ -->
-<header class="site-header" id="siteHeader">
-  <div class="container header-inner">
-    <a class="logo" href="#" data-action="go-home">
-      <span class="logo-mark"><svg class="icon" aria-hidden="true"><use href="#i-mark"/></svg></span>
-      <span class="logo-text">GitHub Profile Finder</span>
-    </a>
+    <!-- ============ HEADER ============ -->
+    <header class="site-header" id="siteHeader">
+      <div class="container header-inner">
+        <a class="logo" href="#" data-action="go-home">
+          <span class="logo-mark"
+            ><svg class="icon" aria-hidden="true"><use href="#i-mark" /></svg
+          ></span>
+          <span class="logo-text">GitHub Profile Finder</span>
+        </a>
 
-    <!-- compact header search, only visible outside the landing state -->
-    <form class="header-search" id="headerSearchForm" role="search" hidden>
-      <div class="field">
-        <svg class="icon field-icon" aria-hidden="true"><use href="#i-search"/></svg>
-        <input class="input" id="headerSearchInput" type="search" name="username" autocomplete="off"
-               spellcheck="false" placeholder="Enter a GitHub username..." aria-label="GitHub username" />
-      </div>
-      <button class="btn btn-primary" type="submit">
-        <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
-        <span class="btn-label">Search</span>
-      </button>
-    </form>
-
-    <nav class="site-nav" id="siteNav" aria-label="Main">
-      <a class="nav-link" href="#about" data-action="about">About</a>
-      <a class="nav-link" href="https://docs.github.com/en/rest" target="_blank" rel="noopener noreferrer">
-        API docs <svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg>
-      </a>
-    </nav>
-
-    <div class="header-actions">
-      <button class="btn-icon" id="themeToggle" type="button" aria-live="polite" aria-label="Switch to dark theme" title="Switch theme">
-        <svg class="icon icon-light" aria-hidden="true"><use href="#i-moon"/></svg>
-        <svg class="icon icon-dark" aria-hidden="true"><use href="#i-sun"/></svg>
-      </button>
-      <button class="btn-icon nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">
-        <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <div class="mobile-nav" id="mobileNav" hidden>
-    <div class="container">
-      <a class="nav-link" href="#about" data-action="about">About</a>
-      <a class="nav-link" href="https://docs.github.com/en/rest" target="_blank" rel="noopener noreferrer">
-        API docs <svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg>
-      </a>
-    </div>
-  </div>
-</header>
-
-<main id="main">
-
-<!-- ============ 1. LANDING / EMPTY SEARCH ============ -->
-<section class="view view-landing" id="viewLanding">
-  <div class="container hero">
-    <h1 class="hero-title">Explore GitHub Profiles</h1>
-    <p class="hero-sub">Search for a GitHub user and explore their profile, repositories, activity and contributions.</p>
-
-    <form class="hero-search" id="heroSearchForm" role="search">
-      <div class="field field-lg">
-        <svg class="icon field-icon" aria-hidden="true"><use href="#i-search"/></svg>
-        <input class="input" id="heroSearchInput" type="search" name="username" autocomplete="off"
-               spellcheck="false" autocapitalize="off" placeholder="Enter a GitHub username..."
-               aria-label="GitHub username" aria-describedby="searchHint" />
-      </div>
-      <button class="btn btn-primary btn-lg" type="submit">Search</button>
-    </form>
-
-    <p class="hint" id="searchHint"><kbd>Enter</kbd> to search</p>
-
-    <div class="examples">
-      <span class="examples-label">Try</span>
-      <button class="chip" type="button" data-example="torvalds">torvalds</button>
-      <button class="chip" type="button" data-example="octocat">octocat</button>
-      <button class="chip" type="button" data-example="gaearon">gaearon</button>
-    </div>
-  </div>
-
-  <div class="container">
-    <section class="info-strip" aria-label="What you can explore">
-      <h2 class="info-title">What you can explore</h2>
-      <ul class="info-list">
-        <li><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>Profile information</li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-repo"/></svg>Public repositories</li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>Followers and following</li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg>Programming languages</li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg>GitHub activity</li>
-      </ul>
-    </section>
-  </div>
-</section>
-
-<!-- ============ 2. LOADING (SKELETON) ============ -->
-<section class="view" id="viewLoading" hidden aria-busy="true" aria-label="Loading profile">
-  <div class="container">
-    <div class="profile-hero">
-      <div class="sk sk-avatar"></div>
-      <div class="profile-hero-body">
-        <div class="sk sk-line" style="width:220px;height:28px"></div>
-        <div class="sk sk-line" style="width:140px"></div>
-        <div class="sk sk-line" style="width:min(420px,90%)"></div>
-        <div class="sk-meta">
-          <div class="sk sk-line" style="width:110px"></div>
-          <div class="sk sk-line" style="width:130px"></div>
-          <div class="sk sk-line" style="width:90px"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="stats-row">
-      <div class="stat"><div class="sk sk-line" style="width:48px;height:22px"></div><div class="sk sk-line" style="width:74px"></div></div>
-      <div class="stat"><div class="sk sk-line" style="width:48px;height:22px"></div><div class="sk sk-line" style="width:74px"></div></div>
-      <div class="stat"><div class="sk sk-line" style="width:48px;height:22px"></div><div class="sk sk-line" style="width:74px"></div></div>
-      <div class="stat"><div class="sk sk-line" style="width:48px;height:22px"></div><div class="sk sk-line" style="width:74px"></div></div>
-    </div>
-
-    <div class="profile-grid">
-      <div>
-        <div class="section-head"><div class="sk sk-line" style="width:120px;height:20px"></div></div>
-        <div class="repo-grid" id="loadingRepos"></div>
-      </div>
-      <aside class="sidebar">
-        <div class="card">
-          <div class="card-head"><div class="sk sk-line" style="width:130px"></div></div>
-          <div class="card-body sk-stack">
-            <div class="sk sk-line"></div><div class="sk sk-line" style="width:80%"></div>
-            <div class="sk sk-line" style="width:65%"></div><div class="sk sk-line" style="width:72%"></div>
+        <!-- compact header search, only visible outside the landing state -->
+        <form class="header-search" id="headerSearchForm" role="search" hidden>
+          <div class="field">
+            <svg class="icon field-icon" aria-hidden="true">
+              <use href="#i-search" />
+            </svg>
+            <input
+              class="input"
+              id="headerSearchInput"
+              type="search"
+              name="username"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Enter a GitHub username..."
+              aria-label="GitHub username"
+            />
           </div>
-        </div>
-      </aside>
-    </div>
-  </div>
-</section>
+          <button class="btn btn-primary" type="submit">
+            <svg class="icon" aria-hidden="true"><use href="#i-search" /></svg>
+            <span class="btn-label">Search</span>
+          </button>
+        </form>
 
-<!-- ============ 3+4. PROFILE RESULT ============ -->
-<section class="view" id="viewProfile" hidden>
-  <div class="container">
+        <nav class="site-nav" id="siteNav" aria-label="Main">
+          <a class="nav-link" href="#about" data-action="about">About</a>
+          <a
+            class="nav-link"
+            href="https://docs.github.com/en/rest"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            API docs
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#i-external" />
+            </svg>
+          </a>
+        </nav>
 
-    <div class="profile-hero">
-      <img class="avatar" id="pAvatar" alt="" width="120" height="120" decoding="async" />
-      <div class="profile-hero-body">
-        <div class="identity">
-          <h1 class="p-name" id="pName">—</h1>
-          <a class="p-login" id="pLogin" href="#" target="_blank" rel="noopener noreferrer">@—</a>
+        <div class="header-actions">
+          <button
+            class="btn-icon"
+            id="themeToggle"
+            type="button"
+            aria-live="polite"
+            aria-label="Switch to dark theme"
+            title="Switch theme"
+          >
+            <svg class="icon icon-light" aria-hidden="true">
+              <use href="#i-moon" />
+            </svg>
+            <svg class="icon icon-dark" aria-hidden="true">
+              <use href="#i-sun" />
+            </svg>
+          </button>
+          <button
+            class="btn-icon nav-toggle"
+            id="navToggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="mobileNav"
+            aria-label="Open menu"
+          >
+            <svg class="icon" aria-hidden="true"><use href="#i-menu" /></svg>
+          </button>
         </div>
-        <p class="p-bio" id="pBio" hidden></p>
-        <ul class="p-meta" id="pMeta"></ul>
-        <div class="profile-cta">
-          <a class="btn btn-secondary" id="pProfileLink" href="#" target="_blank" rel="noopener noreferrer">
-            <svg class="icon" aria-hidden="true"><use href="#i-mark"/></svg>
-            View on GitHub
-            <svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg>
+      </div>
+
+      <div class="mobile-nav" id="mobileNav" hidden>
+        <div class="container">
+          <a class="nav-link" href="#about" data-action="about">About</a>
+          <a
+            class="nav-link"
+            href="https://docs.github.com/en/rest"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            API docs
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#i-external" />
+            </svg>
           </a>
         </div>
       </div>
-    </div>
+    </header>
 
-    <div class="stats-row" id="pStats" role="list"></div>
+    <main id="main">
+      <!-- ============ 1. LANDING / EMPTY SEARCH ============ -->
+      <section class="view view-landing" id="viewLanding">
+        <div class="container hero">
+          <h1 class="hero-title">Explore GitHub Profiles</h1>
+          <p class="hero-sub">
+            Search for a GitHub user and explore their profile, repositories,
+            activity and contributions.
+          </p>
 
-    <div class="profile-grid">
-      <!-- main column -->
-      <section class="repos-col" aria-labelledby="reposHeading">
-        <div class="section-head">
-          <h2 class="section-title" id="reposHeading">Repositories <span class="count" id="repoCount"></span></h2>
-          <div class="repo-controls">
-            <div class="field field-sm">
-              <svg class="icon field-icon" aria-hidden="true"><use href="#i-filter"/></svg>
-              <input class="input" id="repoFilter" type="search" placeholder="Filter repositories" aria-label="Filter repositories" autocomplete="off" />
+          <form class="hero-search" id="heroSearchForm" role="search">
+            <div class="field field-lg">
+              <svg class="icon field-icon" aria-hidden="true">
+                <use href="#i-search" />
+              </svg>
+              <input
+                class="input"
+                id="heroSearchInput"
+                type="search"
+                name="username"
+                autocomplete="off"
+                spellcheck="false"
+                autocapitalize="off"
+                placeholder="Enter a GitHub username..."
+                aria-label="GitHub username"
+                aria-describedby="searchHint"
+              />
             </div>
-            <div class="select-wrap">
-              <svg class="icon field-icon" aria-hidden="true"><use href="#i-sort"/></svg>
-              <select class="select" id="repoSort" aria-label="Sort repositories">
-                <option value="updated">Last updated</option>
-                <option value="stars">Most stars</option>
-                <option value="forks">Most forks</option>
-                <option value="name">Name (A–Z)</option>
-                <option value="created">Newest</option>
-              </select>
-            </div>
+            <button class="btn btn-primary btn-lg" type="submit">Search</button>
+          </form>
+
+          <p class="hint" id="searchHint"><kbd>Enter</kbd> to search</p>
+
+          <div class="examples">
+            <span class="examples-label">Try</span>
+            <button class="chip" type="button" data-example="torvalds">
+              torvalds
+            </button>
+            <button class="chip" type="button" data-example="octocat">
+              octocat
+            </button>
+            <button class="chip" type="button" data-example="gaearon">
+              gaearon
+            </button>
           </div>
         </div>
 
-        <div class="repo-grid" id="repoGrid"></div>
-
-        <!-- 8. empty repository search state -->
-        <div class="empty-state" id="repoEmpty" hidden>
-          <div class="empty-icon"><svg class="icon" aria-hidden="true"><use href="#i-repo"/></svg></div>
-          <h3 class="empty-title">No repositories found</h3>
-          <p class="empty-text" id="repoEmptyText">No repositories match your filter. Try a different term or clear the filter to see everything again.</p>
-          <button class="btn btn-secondary" type="button" id="clearFilter">Clear filter</button>
-        </div>
-
-        <div class="load-more-wrap" id="loadMoreWrap" hidden>
-          <button class="btn btn-secondary" type="button" id="loadMore">Load more repositories</button>
-          <p class="load-more-count" id="loadMoreCount"></p>
+        <div class="container">
+          <section class="info-strip" aria-label="What you can explore">
+            <h2 class="info-title">What you can explore</h2>
+            <ul class="info-list">
+              <li>
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-users" /></svg
+                >Profile information
+              </li>
+              <li>
+                <svg class="icon" aria-hidden="true"><use href="#i-repo" /></svg
+                >Public repositories
+              </li>
+              <li>
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-users" /></svg
+                >Followers and following
+              </li>
+              <li>
+                <svg class="icon" aria-hidden="true"><use href="#i-code" /></svg
+                >Programming languages
+              </li>
+              <li>
+                <svg class="icon" aria-hidden="true"><use href="#i-star" /></svg
+                >GitHub activity
+              </li>
+            </ul>
+          </section>
         </div>
       </section>
 
-      <!-- sidebar -->
-      <aside class="sidebar" aria-label="GitHub overview">
-        <div class="card">
-          <div class="card-head"><h2 class="card-title">Most used languages</h2></div>
-          <div class="card-body" id="langBox"></div>
-        </div>
+      <!-- ============ 2. LOADING (SKELETON) ============ -->
+      <section
+        class="view"
+        id="viewLoading"
+        hidden
+        aria-busy="true"
+        aria-label="Loading profile"
+      >
+        <div class="container">
+          <div class="profile-hero">
+            <div class="sk sk-avatar"></div>
+            <div class="profile-hero-body">
+              <div class="sk sk-line" style="width: 220px; height: 28px"></div>
+              <div class="sk sk-line" style="width: 140px"></div>
+              <div class="sk sk-line" style="width: min(420px, 90%)"></div>
+              <div class="sk-meta">
+                <div class="sk sk-line" style="width: 110px"></div>
+                <div class="sk sk-line" style="width: 130px"></div>
+                <div class="sk sk-line" style="width: 90px"></div>
+              </div>
+            </div>
+          </div>
 
-        <div class="card">
-          <div class="card-head"><h2 class="card-title">Contribution summary</h2></div>
-          <div class="card-body">
-            <ul class="kv-list" id="summaryBox"></ul>
+          <div class="stats-row">
+            <div class="stat">
+              <div class="sk sk-line" style="width: 48px; height: 22px"></div>
+              <div class="sk sk-line" style="width: 74px"></div>
+            </div>
+            <div class="stat">
+              <div class="sk sk-line" style="width: 48px; height: 22px"></div>
+              <div class="sk sk-line" style="width: 74px"></div>
+            </div>
+            <div class="stat">
+              <div class="sk sk-line" style="width: 48px; height: 22px"></div>
+              <div class="sk sk-line" style="width: 74px"></div>
+            </div>
+            <div class="stat">
+              <div class="sk sk-line" style="width: 48px; height: 22px"></div>
+              <div class="sk sk-line" style="width: 74px"></div>
+            </div>
+          </div>
+
+          <div class="profile-grid">
+            <div>
+              <div class="section-head">
+                <div
+                  class="sk sk-line"
+                  style="width: 120px; height: 20px"
+                ></div>
+              </div>
+              <div class="repo-grid" id="loadingRepos"></div>
+            </div>
+            <aside class="sidebar">
+              <div class="card">
+                <div class="card-head">
+                  <div class="sk sk-line" style="width: 130px"></div>
+                </div>
+                <div class="card-body sk-stack">
+                  <div class="sk sk-line"></div>
+                  <div class="sk sk-line" style="width: 80%"></div>
+                  <div class="sk sk-line" style="width: 65%"></div>
+                  <div class="sk sk-line" style="width: 72%"></div>
+                </div>
+              </div>
+            </aside>
           </div>
         </div>
+      </section>
 
-        <div class="card">
-          <div class="card-head"><h2 class="card-title">Profile information</h2></div>
-          <div class="card-body">
-            <ul class="kv-list" id="infoBox"></ul>
+      <!-- ============ 3+4. PROFILE RESULT ============ -->
+      <section class="view" id="viewProfile" hidden>
+        <div class="container">
+          <div class="profile-hero">
+            <img
+              class="avatar"
+              id="pAvatar"
+              alt=""
+              width="120"
+              height="120"
+              decoding="async"
+            />
+            <div class="profile-hero-body">
+              <div class="identity">
+                <h1 class="p-name" id="pName">—</h1>
+                <a
+                  class="p-login"
+                  id="pLogin"
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >@—</a
+                >
+              </div>
+              <p class="p-bio" id="pBio" hidden></p>
+              <ul class="p-meta" id="pMeta"></ul>
+              <div class="profile-cta">
+                <a
+                  class="btn btn-secondary"
+                  id="pProfileLink"
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <svg class="icon" aria-hidden="true">
+                    <use href="#i-mark" />
+                  </svg>
+                  View on GitHub
+                  <svg class="icon icon-sm" aria-hidden="true">
+                    <use href="#i-external" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-row" id="pStats" role="list"></div>
+
+          <div class="profile-grid">
+            <!-- main column -->
+            <section class="repos-col" aria-labelledby="reposHeading">
+              <div class="section-head">
+                <h2 class="section-title" id="reposHeading">
+                  Repositories <span class="count" id="repoCount"></span>
+                </h2>
+                <div class="repo-controls">
+                  <div class="field field-sm">
+                    <svg class="icon field-icon" aria-hidden="true">
+                      <use href="#i-filter" />
+                    </svg>
+                    <input
+                      class="input"
+                      id="repoFilter"
+                      type="search"
+                      placeholder="Filter repositories"
+                      aria-label="Filter repositories"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div class="select-wrap">
+                    <svg class="icon field-icon" aria-hidden="true">
+                      <use href="#i-sort" />
+                    </svg>
+                    <select
+                      class="select"
+                      id="repoSort"
+                      aria-label="Sort repositories"
+                    >
+                      <option value="updated">Last updated</option>
+                      <option value="stars">Most stars</option>
+                      <option value="forks">Most forks</option>
+                      <option value="name">Name (A–Z)</option>
+                      <option value="created">Newest</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="repo-grid" id="repoGrid"></div>
+
+              <!-- 8. empty repository search state -->
+              <div class="empty-state" id="repoEmpty" hidden>
+                <div class="empty-icon">
+                  <svg class="icon" aria-hidden="true">
+                    <use href="#i-repo" />
+                  </svg>
+                </div>
+                <h3 class="empty-title">No repositories found</h3>
+                <p class="empty-text" id="repoEmptyText">
+                  No repositories match your filter. Try a different term or
+                  clear the filter to see everything again.
+                </p>
+                <button
+                  class="btn btn-secondary"
+                  type="button"
+                  id="clearFilter"
+                >
+                  Clear filter
+                </button>
+              </div>
+
+              <div class="load-more-wrap" id="loadMoreWrap" hidden>
+                <button class="btn btn-secondary" type="button" id="loadMore">
+                  Load more repositories
+                </button>
+                <p class="load-more-count" id="loadMoreCount"></p>
+              </div>
+            </section>
+
+            <!-- sidebar -->
+            <aside class="sidebar" aria-label="GitHub overview">
+              <div class="card">
+                <div class="card-head">
+                  <h2 class="card-title">Most used languages</h2>
+                </div>
+                <div class="card-body" id="langBox"></div>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <h2 class="card-title">Contribution summary</h2>
+                </div>
+                <div class="card-body">
+                  <ul class="kv-list" id="summaryBox"></ul>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <h2 class="card-title">Profile information</h2>
+                </div>
+                <div class="card-body">
+                  <ul class="kv-list" id="infoBox"></ul>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-head"><h2 class="card-title">Links</h2></div>
+                <div class="card-body">
+                  <ul class="link-list" id="linksBox"></ul>
+                </div>
+              </div>
+            </aside>
           </div>
         </div>
+      </section>
 
-        <div class="card">
-          <div class="card-head"><h2 class="card-title">Links</h2></div>
-          <div class="card-body">
-            <ul class="link-list" id="linksBox"></ul>
+      <!-- ============ 6. USER NOT FOUND ============ -->
+      <section class="view" id="viewNotFound" hidden>
+        <div class="container state-panel">
+          <div class="state-icon">
+            <svg class="icon" aria-hidden="true"><use href="#i-mark" /></svg>
+          </div>
+          <h1 class="state-title">User not found</h1>
+          <p class="state-text">
+            We couldn't find a GitHub user with that username. Check the
+            spelling and try again.
+          </p>
+          <form class="state-search" id="notFoundForm" role="search">
+            <div class="field">
+              <svg class="icon field-icon" aria-hidden="true">
+                <use href="#i-search" />
+              </svg>
+              <input
+                class="input"
+                id="notFoundInput"
+                type="search"
+                placeholder="Enter a GitHub username..."
+                aria-label="GitHub username"
+                autocomplete="off"
+              />
+            </div>
+            <button class="btn btn-primary" type="submit">Search</button>
+          </form>
+          <button class="btn btn-ghost" type="button" data-action="go-home">
+            Back to search
+          </button>
+        </div>
+      </section>
+
+      <!-- ============ 7. API / REQUEST ERROR ============ -->
+      <section class="view" id="viewError" hidden>
+        <div class="container state-panel">
+          <div class="state-icon state-icon-warn">
+            <svg class="icon" aria-hidden="true"><use href="#i-alert" /></svg>
+          </div>
+          <h1 class="state-title">Something went wrong</h1>
+          <p class="state-text">
+            We couldn't load this profile right now. Please try again.
+          </p>
+          <p class="state-detail" id="errorDetail" hidden></p>
+          <div class="state-actions">
+            <button class="btn btn-primary" type="button" id="retryBtn">
+              Try again
+            </button>
+            <button class="btn btn-ghost" type="button" data-action="go-home">
+              Back to search
+            </button>
           </div>
         </div>
-      </aside>
-    </div>
-  </div>
-</section>
+      </section>
+    </main>
 
-<!-- ============ 6. USER NOT FOUND ============ -->
-<section class="view" id="viewNotFound" hidden>
-  <div class="container state-panel">
-    <div class="state-icon"><svg class="icon" aria-hidden="true"><use href="#i-mark"/></svg></div>
-    <h1 class="state-title">User not found</h1>
-    <p class="state-text">We couldn't find a GitHub user with that username. Check the spelling and try again.</p>
-    <form class="state-search" id="notFoundForm" role="search">
-      <div class="field">
-        <svg class="icon field-icon" aria-hidden="true"><use href="#i-search"/></svg>
-        <input class="input" id="notFoundInput" type="search" placeholder="Enter a GitHub username..." aria-label="GitHub username" autocomplete="off" />
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>
+          Built with vanilla JavaScript and the public GitHub REST API. No
+          account or backend required.
+        </p>
+        <p class="footer-meta" id="rateMeta"></p>
       </div>
-      <button class="btn btn-primary" type="submit">Search</button>
-    </form>
-    <button class="btn btn-ghost" type="button" data-action="go-home">Back to search</button>
-  </div>
-</section>
-
-<!-- ============ 7. API / REQUEST ERROR ============ -->
-<section class="view" id="viewError" hidden>
-  <div class="container state-panel">
-    <div class="state-icon state-icon-warn"><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg></div>
-    <h1 class="state-title">Something went wrong</h1>
-    <p class="state-text">We couldn't load this profile right now. Please try again.</p>
-    <p class="state-detail" id="errorDetail" hidden></p>
-    <div class="state-actions">
-      <button class="btn btn-primary" type="button" id="retryBtn">Try again</button>
-      <button class="btn btn-ghost" type="button" data-action="go-home">Back to search</button>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <p>Built with vanilla JavaScript and the public GitHub REST API. No account or backend required.</p>
-    <p class="footer-meta" id="rateMeta"></p>
-  </div>
-</footer>
-
-<!-- ============ 5. REPOSITORY DETAILS MODAL ============ -->
-<div class="modal-backdrop" id="modalBackdrop" hidden>
-  <div class="modal" id="repoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <header class="modal-head">
-      <div class="modal-head-text">
-        <p class="modal-owner" id="modalOwner"></p>
-        <h2 class="modal-title" id="modalTitle"></h2>
-      </div>
-      <button class="btn-icon" type="button" id="modalClose" aria-label="Close dialog">
-        <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
-      </button>
-    </header>
-    <div class="modal-body">
-      <p class="modal-desc" id="modalDesc"></p>
-      <div class="modal-stats" id="modalStats"></div>
-      <dl class="modal-facts" id="modalFacts"></dl>
-      <div class="topics" id="modalTopics" hidden></div>
-      <div class="modal-url">
-        <span class="label">Repository URL</span>
-        <code class="url" id="modalUrl"></code>
-      </div>
-    </div>
-    <footer class="modal-foot">
-      <button class="btn btn-ghost" type="button" data-close-modal>Close</button>
-      <a class="btn btn-primary" id="modalLink" href="#" target="_blank" rel="noopener noreferrer">
-        View on GitHub <svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg>
-      </a>
     </footer>
-  </div>
-</div>
 
-<!-- ============ ABOUT MODAL ============ -->
-<div class="modal-backdrop" id="aboutBackdrop" hidden>
-  <div class="modal modal-sm" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
-    <header class="modal-head">
-      <div class="modal-head-text"><h2 class="modal-title" id="aboutTitle">About</h2></div>
-      <button class="btn-icon" type="button" data-close-modal aria-label="Close dialog">
-        <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
-      </button>
-    </header>
-    <div class="modal-body prose">
-      <p>GitHub Profile Finder is a front-end portfolio project. It looks up public GitHub profiles and repositories through the public GitHub REST API, directly from your browser.</p>
-      <p>There is no backend, no account and no data storage — only your theme preference is kept locally. Unauthenticated API requests are rate limited by GitHub to 60 per hour per IP address.</p>
+    <!-- ============ 5. REPOSITORY DETAILS MODAL ============ -->
+    <div class="modal-backdrop" id="modalBackdrop" hidden>
+      <div
+        class="modal"
+        id="repoModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+      >
+        <header class="modal-head">
+          <div class="modal-head-text">
+            <p class="modal-owner" id="modalOwner"></p>
+            <h2 class="modal-title" id="modalTitle"></h2>
+          </div>
+          <button
+            class="btn-icon"
+            type="button"
+            id="modalClose"
+            aria-label="Close dialog"
+          >
+            <svg class="icon" aria-hidden="true"><use href="#i-close" /></svg>
+          </button>
+        </header>
+        <div class="modal-body">
+          <p class="modal-desc" id="modalDesc"></p>
+          <div class="modal-stats" id="modalStats"></div>
+          <dl class="modal-facts" id="modalFacts"></dl>
+          <div class="topics" id="modalTopics" hidden></div>
+          <div class="modal-url">
+            <span class="label">Repository URL</span>
+            <code class="url" id="modalUrl"></code>
+          </div>
+        </div>
+        <footer class="modal-foot">
+          <button class="btn btn-ghost" type="button" data-close-modal>
+            Close
+          </button>
+          <a
+            class="btn btn-primary"
+            id="modalLink"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View on GitHub
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#i-external" />
+            </svg>
+          </a>
+        </footer>
+      </div>
     </div>
-    <footer class="modal-foot">
-      <button class="btn btn-secondary" type="button" data-close-modal>Close</button>
-    </footer>
-  </div>
-</div>
 
-<!-- ============ TOASTS ============ -->
-<div class="toast-region" id="toastRegion" role="status" aria-live="polite"></div>
+    <!-- ============ ABOUT MODAL ============ -->
+    <div class="modal-backdrop" id="aboutBackdrop" hidden>
+      <div
+        class="modal modal-sm"
+        id="aboutModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="aboutTitle"
+      >
+        <header class="modal-head">
+          <div class="modal-head-text">
+            <h2 class="modal-title" id="aboutTitle">About</h2>
+          </div>
+          <button
+            class="btn-icon"
+            type="button"
+            data-close-modal
+            aria-label="Close dialog"
+          >
+            <svg class="icon" aria-hidden="true"><use href="#i-close" /></svg>
+          </button>
+        </header>
+        <div class="modal-body prose">
+          <p>
+            GitHub Profile Finder is a front-end portfolio project. It looks up
+            public GitHub profiles and repositories through the public GitHub
+            REST API, directly from your browser.
+          </p>
+          <p>
+            There is no backend, no account and no data storage — only your
+            theme preference is kept locally. Unauthenticated API requests are
+            rate limited by GitHub to 60 per hour per IP address.
+          </p>
+        </div>
+        <footer class="modal-foot">
+          <button class="btn btn-secondary" type="button" data-close-modal>
+            Close
+          </button>
+        </footer>
+      </div>
+    </div>
 
-<!-- screen-reader announcements for search/filter state changes -->
-<p class="sr-only" id="statusAnnouncer" role="status" aria-live="polite"></p>
+    <!-- ============ TOASTS ============ -->
+    <div
+      class="toast-region"
+      id="toastRegion"
+      role="status"
+      aria-live="polite"
+    ></div>
 
-<script src="js/app.js"></script>
-</body>
+    <!-- screen-reader announcements for search/filter state changes -->
+    <p
+      class="sr-only"
+      id="statusAnnouncer"
+      role="status"
+      aria-live="polite"
+    ></p>
+
+    <script src="js/app.js"></script>
+  </body>
 </html>

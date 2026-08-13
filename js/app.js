@@ -561,8 +561,8 @@
     return '<article class="repo-card" tabindex="0" role="button" data-repo="' + esc(r.name) + '" ' +
       'aria-label="Open details for repository ' + esc(r.name) + '">' +
       '<div class="repo-card-head">' +
-        '<h3 class="repo-name" title="' + esc(r.name) + '">' + esc(r.name) + "</h3>" +
-        "<div>" + badges.join("") + "</div>" +
+      '<h3 class="repo-name" title="' + esc(r.name) + '">' + esc(r.name) + "</h3>" +
+      "<div>" + badges.join("") + "</div>" +
       "</div>" +
       '<p class="repo-desc">' + (r.description ? esc(r.description) : '<em>No description provided.</em>') + "</p>" +
       '<div class="repo-meta">' + meta.join("") + "</div>" +
@@ -820,9 +820,9 @@
         '<div class="sk sk-line"></div>' +
         '<div class="sk sk-line" style="width:70%"></div>' +
         '<div class="sk-card-foot">' +
-          '<div class="sk sk-line" style="width:70px"></div>' +
-          '<div class="sk sk-line" style="width:44px"></div>' +
-          '<div class="sk sk-line" style="width:44px"></div>' +
+        '<div class="sk sk-line" style="width:70px"></div>' +
+        '<div class="sk sk-line" style="width:44px"></div>' +
+        '<div class="sk sk-line" style="width:44px"></div>' +
         "</div></div>";
     }
     $("#loadingRepos").innerHTML = html;
